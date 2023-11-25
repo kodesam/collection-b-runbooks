@@ -1,0 +1,18 @@
+To initiate a system reboot using Linux scripting, you can use the `reboot` command. Here's an example:
+
+```shell
+#!/bin/bash
+
+echo "Initiating system reboot..."
+sudo reboot
+```
+
+Save the above code in a file, for example, `reboot.sh`, and make it executable using the `chmod` command:
+
+```shell
+chmod +x reboot.sh
+```
+
+When you execute the script with `sudo`, it will display a message "Initiating system reboot..." and then reboot the system using the `sudo reboot` command. Please note that you'll need appropriate permissions to execute the `sudo` command.
+
+Remember to save any unsaved work before running the script as the system will reboot immediately.
