@@ -1,0 +1,22 @@
+You can use the `command` or `shell` module in Ansible to execute the `kubectl get services` command. Here's an example in Ansible playbook:
+
+```
+---
+- name: Execute kubectl get services
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Run kubectl get services
+      command: kubectl get services
+```
+
+In this playbook, we specify `hosts: localhost` to run the task on the local machine. You can replace `localhost` with the appropriate host(s) where you want to execute the command.
+
+Save this playbook as `kubectl.yaml` and run it using the `ansible-playbook` command:
+
+```
+ansible-playbook kubectl.yaml
+```
+
+This will execute the `kubectl get services` command on the specified host(s) and display the output.
