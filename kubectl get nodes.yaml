@@ -1,0 +1,24 @@
+To get the list of nodes using `kubectl` in an Ansible playbook, you can use the `shell` module. Here's an example playbook:
+
+```yaml
+---
+- name: Get list of nodes
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Execute kubectl command
+      shell: kubectl get nodes
+      register: result
+
+    - name: Display output
+      debug:
+        var: result.stdout_lines
+```
+
+In this example, the `shell` module is used to execute the `kubectl get nodes` command. The stdout of the command is stored in the variable `result`. 
+
+Then, in the second task, we use the `debug` module to display the output of the command.
+
+Make sure you have the `kubectl` command installed on the machine where you run this playbook, and it is configured to connect to your Kubernetes cluster.
+
+You can run this playbook using the command `ansible-playbook playbook.yml`, where `playbook.yml` is the name of the YAML file that contains the playbook.
