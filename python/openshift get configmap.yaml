@@ -1,0 +1,23 @@
+To retrieve the details of a ConfigMap in OpenShift using Python, you can use the OpenShift Python client library. Here's an example:
+
+```python
+from openshift import client, config
+
+# Load the OpenShift configuration
+config.load_kube_config()
+
+# Create an OpenShift API client
+api_client = client.CoreV1Api()
+
+# Specify the namespace and name of the ConfigMap
+namespace = 'your-namespace'
+name = 'your-configmap'
+
+# Use the API client to get the ConfigMap
+configmap = api_client.read_namespaced_config_map(name, namespace)
+
+# Access the data from the ConfigMap
+data = configmap.data
+```
+
+In this Python code snippet, we first load the OpenShift configuration using `config.load_kube_config()`. Then we create an API client using `client.CoreV1Api()`. Next, we specify the namespace and name of the ConfigMap that you want to retrieve. Finally, we use the API client to read the ConfigMap with `api_client.read_namespaced_config_map()` and access its `data` attribute to retrieve the ConfigMap's data.
