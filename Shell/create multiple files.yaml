@@ -1,0 +1,17 @@
+To create multiple files in Linux using shell scripting, you can use a loop along with the `touch` command. Here's an example:
+
+```shell
+#!/bin/bash
+
+# Specify the names of the files to create
+files=("file1.txt" "file2.txt" "file3.txt")
+
+# Loop through the file names and create each file
+for file in "${files[@]}"
+do
+    touch "$file"
+    echo "Created file: $file"
+done
+```
+
+In this shell script, we define an array `files` that contains the names of the files we want to create. The `for` loop iterates over each file name in the array and uses the `touch` command to create the file. It also echoes a message indicating that each file has been created.
