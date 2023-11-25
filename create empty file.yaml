@@ -1,0 +1,31 @@
+To create an empty file using Linux scripting, you can use the `touch` command.
+
+Here's an example of a shell script that creates an empty file:
+
+```bash
+#!/bin/bash
+
+filename="example.txt"
+
+touch "$filename"
+
+echo "Empty file created: $filename"
+```
+
+In this script, we have created a variable `filename` and assigned it the value "example.txt". The `touch` command is then used with the `$filename` variable to create the empty file.
+
+After executing this script, an empty file named "example.txt" will be created in the same directory where the script resides.
+
+You can save this script to a file (e.g., create_empty_file.sh) and make it executable using the following command:
+
+```bash
+chmod +x create_empty_file.sh
+```
+
+Then, you can run the script using:
+
+```bash
+./create_empty_file.sh
+```
+
+This will create the empty file and display a message confirming the creation.
