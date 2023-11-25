@@ -1,0 +1,17 @@
+To get the status of a service using the `systemctl` command in Linux scripting, you can use the following code:
+
+```bash
+#!/bin/bash
+
+SERVICE_NAME="service_name"
+
+status=$(systemctl is-active $SERVICE_NAME)
+
+if [[ $status == "active" ]]; then
+    echo "$SERVICE_NAME is running"
+else
+    echo "$SERVICE_NAME is not running"
+fi
+```
+
+Replace `service_name` with the actual name of the service you want to check. This script will print whether the service is running or not.
