@@ -1,0 +1,8 @@
+To view network status on Linux, you can use the `netstat` command. Here are a few common `netstat` command options:
+
+- `netstat -tun`: Displays all active TCP and UDP connections.
+- `netstat -rn`: Shows the routing table.
+- `netstat -i`: Provides network interface statistics.
+- `netstat -s`: Gives a summary of network statistics.
+
+You can run any of these commands in the terminal to get the desired network status information on your Linux system.
