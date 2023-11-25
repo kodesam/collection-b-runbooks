@@ -1,0 +1,46 @@
+To get the Persistent Volume Claims (PVCs) in OpenShift using Python, you can utilize the OpenShift Python client library. Here's a step-by-step guide using a Jupyter Notebook:
+
+1. Install the OpenShift Python client library:
+
+```python
+!pip install openshift
+```
+
+2. Import the necessary libraries:
+
+```python
+from openshift import client, config
+```
+
+3. Configure the OpenShift Python client:
+
+```python
+config.load_kube_config() # Loads the default OpenShift configuration from ~/.kube/config
+```
+
+4. Get the OpenShift client:
+
+```python
+oc = client.OapiApi()
+```
+
+5. Retrieve the PVCs:
+
+```python
+pvc_list = oc.list_namespaced_persistent_volume_claim(namespace='your_namespace')
+```
+
+Replace `your_namespace` with the appropriate namespace where your PVCs are located.
+
+6. Iterate over the PVC list and print the name of each PVC:
+
+```python
+for pvc in pvc_list.items:
+    print(pvc.metadata.name)
+```
+
+This will print the names of all the PVCs in the specified namespace.
+
+Remember to replace `your_namespace` with your actual namespace name. You may also need to adjust the OpenShift configuration if you're using a non-default configuration file.
+
+Make sure you have the necessary permissions to access the OpenShift API and retrieve the PVC information.
