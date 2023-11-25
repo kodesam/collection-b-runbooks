@@ -1,0 +1,45 @@
+To get pod logs in Ansible, you can use the `k8s` module. Here's an example playbook that demonstrates how to fetch pod logs from an OpenShift cluster:
+
+```yaml
+---
+- name: Fetch pod logs from OpenShift cluster
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Fetch pod list
+      k8s_info:
+        api_version: v1
+        kind: Pod
+        label_selectors:
+          - app=myapp  # Replace with the label selector for your pods
+      register: pod_info
+
+    - name: Fetch pod logs
+      k8s_status:
+        api_version: v1
+        kind: Pod
+        name: "{{ item.metadata.name }}"
+        container: "{{ item.spec.containers[0].name }}"
+        namespace: "{{ item.metadata.namespace }}"
+      register: pod_logs
+      loop: "{{ pod_info.resources }}"
+
+    - name: Display pod logs
+      debug:
+        var: item.result.stdout
+      loop: "{{ pod_logs.results }}"
+```
+
+In this example, we first use the `k8s_info` module to fetch the list of pods based on the label selector (`app=myapp`). The output is stored in the `pod_info` variable.
+
+Then, in the second task, we use the `k8s_status` module inside a loop to fetch the logs for each pod. We provide the pod name, container name, and the namespace.
+
+Finally, we display the logs using the `debug` module.
+
+Make sure you have the `openshift` and `kubernetes` Python libraries installed on the machine where you run this playbook. You can install them using `pip`:
+
+```bash
+pip install openshift kubernetes
+```
+
+Please modify the playbook according to your specific requirements, such as the label selector and the containers to fetch logs from.
