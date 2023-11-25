@@ -1,0 +1,20 @@
+To copy a file from one server to another server using Linux shell scripting, you can use the `scp` command.
+
+Here's an example script:
+
+```bash
+#!/bin/bash
+
+# Variables
+source_server="user@source_server_ip"
+destination_server="user@destination_server_ip"
+source_file="/path/to/source/file.txt"
+destination_directory="/path/to/destination_directory/"
+
+# Copy file from source server to local machine
+scp $source_server:$source_file $destination_server:$destination_directory
+```
+
+Replace `user` with the username for both the source and destination servers, `source_server_ip` with the IP address or hostname of the source server, `destination_server_ip` with the IP address or hostname of the destination server, `/path/to/source/file.txt` with the path to the file you want to copy from the source server, and `/path/to/destination_directory/` with the directory where you want to copy the file on the destination server.
+
+Save the script to a file (e.g., `copy_file.sh`), give it execute permissions (`chmod +x copy_file.sh`), and then run it using `./copy_file.sh` on the source server. The script will use `scp` to securely copy the file from the source server to the destination server.
