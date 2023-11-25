@@ -1,0 +1,13 @@
+To run `kubectl get pod` command in Python, you can use the `subprocess` module to execute the command and capture the output. Here's an example:
+
+```python
+import subprocess
+
+# Run the command
+output = subprocess.check_output(["kubectl", "get", "pod"])
+
+# Print the output
+print(output.decode())
+```
+
+This code will execute the `kubectl get pod` command and print the output to the console. You can also store the output in a variable or process it further as needed.
