@@ -1,0 +1,21 @@
+To create a folder in a Linux environment using a shell script, you can use the `mkdir` command. Here's an example script:
+
+```bash
+#!/bin/bash
+
+folder_name="my_folder"  # Replace with the desired folder name
+
+# Check if the folder already exists
+if [ -d "$folder_name" ]; then
+  echo "Folder $folder_name already exists."
+else
+  # Create the folder
+  mkdir "$folder_name"
+  echo "Folder $folder_name created successfully."
+fi
+```
+
+Save the script in a file, for example, `create_folder.sh`, and make it executable by running the command `chmod +x create_folder.sh` in the terminal.
+Then, you can execute the script by running `./create_folder.sh` in the terminal.
+
+The script checks if the folder with the specified name already exists. If it exists, it displays a message stating that the folder already exists. Otherwise, it creates the folder using the `mkdir` command and displays a success message.
