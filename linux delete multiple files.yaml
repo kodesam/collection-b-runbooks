@@ -1,0 +1,28 @@
+To delete multiple files in Linux, you can use the `rm` command along with a pattern or a list of filenames. Here are a few examples:
+
+1. Delete all files with a specific extension:
+```shell
+rm -r /path/to/files/*.txt
+```
+
+2. Delete all files with a specific prefix:
+```shell
+rm -r /path/to/files/prefix_*
+```
+
+3. Delete specific files:
+```shell
+rm -r /path/to/files/file1.txt /path/to/files/file2.txt
+```
+
+4. Delete files using a wildcard pattern:
+```shell
+rm -r /path/to/files/file*
+```
+
+5. Delete files recursively from a directory:
+```shell
+rm -r /path/to/files/
+```
+
+Please be cautious when using the `rm` command as it permanently deletes the specified files and they cannot be recovered easily. It's always a good practice to double-check the files you are deleting before executing the command.
