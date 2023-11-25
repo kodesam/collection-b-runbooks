@@ -1,0 +1,27 @@
+In Ansible, you can use the `ansible.builtin.file` module to delete files on remote hosts. Here's an example playbook that demonstrates how to use the module to delete files:
+
+```yaml
+- name: Delete files
+  hosts: your_host
+  tasks:
+    - name: Delete a file
+      ansible.builtin.file:
+        path: /path/to/file.txt
+        state: absent
+  
+    - name: Delete a directory
+      ansible.builtin.file:
+        path: /path/to/directory
+        state: absent
+        recursive: yes
+```
+
+Replace `your_host` with the target hosts where you want to delete the files. In the `Delete a file` task, specify the `path` parameter with the path to the file you want to delete. In the `Delete a directory` task, provide the `path` parameter with the path to the directory you want to delete. Additionally, set `recursive: yes` to delete the contents of the directory recursively.
+
+You can run this playbook using the `ansible-playbook` command:
+
+```
+ansible-playbook your_playbook.yml
+```
+
+Please ensure that you have necessary permissions to delete the files on the target hosts.
