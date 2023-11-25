@@ -1,0 +1,21 @@
+To execute the `openshift get pod` command in a Jupyter notebook using Python, you can utilize the `subprocess` module:
+
+Here's an example code snippet:
+
+```python
+import subprocess
+
+# Define the openshift command
+openshift_command = "oc get pod"
+
+# Run the command and capture the output
+output = subprocess.check_output(openshift_command.split())
+
+# Decode the byte output to string
+output = output.decode("utf-8")
+
+# Print the output
+print(output)
+```
+
+This code will run the `oc get pod` command and print the output in the notebook. Make sure you have the `oc` binary set up in your environment and have the necessary permissions to execute the command.
