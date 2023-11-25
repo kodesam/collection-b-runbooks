@@ -1,0 +1,29 @@
+Ansible is an open-source automation tool that is used for configuring and managing systems. It is not specifically designed to work with Kubernetes or custom operators, but it can be used to automate tasks related to managing clusters and deploying operators.
+
+To interact with Kubernetes and retrieve information about custom operators, you can use the `kubectl` command-line utility within an Ansible playbook. Here's an example of how you can use Ansible to execute the `kubectl get` command and retrieve information about custom operators:
+
+```yaml
+---
+- name: Get Custom Operator info
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Execute kubectl get command
+      command:
+        cmd: "kubectl get customresourcedefinitions"
+      register: custom_operators_info
+
+    - name: Print custom operators info
+      debug:
+        var: custom_operators_info.stdout_lines
+```
+
+In this example, the playbook executes the `kubectl get customresourcedefinitions` command and stores the output in the `custom_operators_info` variable. Then, it uses the `debug` module to print the output on the screen.
+
+You can run this playbook by saving it in a file (e.g., `get_custom_operators.yaml`) and executing the following command:
+
+```shell
+ansible-playbook get_custom_operators.yaml
+```
+
+Please note that you need `kubectl` installed and properly configured on the machine where you execute the playbook.
