@@ -1,0 +1,26 @@
+To execute the `oc get pod` command in Ansible to get the pods in OpenShift, you can use the `command` module. Here's an example of how you can do it in an Ansible playbook:
+
+```yaml
+---
+- name: Execute oc get pod command
+  hosts: your_servers
+  
+  tasks:
+    - name: Run oc get pod command
+      command: oc get pod
+      register: oc_output
+      
+    - name: Print oc output
+      debug:
+        var: oc_output.stdout_lines
+```
+
+Replace `your_servers` with the name of the target servers where OpenShift is installed. The `command` module will execute the `oc get pod` command on the target servers, and the output will be saved in the `oc_output` variable. Finally, the `debug` module will print the output of the `oc` command.
+
+You can run this playbook using the `ansible-playbook` command:
+
+```shell
+ansible-playbook your-playbook.yml
+```
+
+Ensure that you have Ansible installed and configured to connect to your target servers with the necessary privileges to run the `oc` command.
