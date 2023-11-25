@@ -1,0 +1,19 @@
+To run the `kubectl get pods` command in a Jupyter notebook using Python, you can use the `subprocess` module:
+
+```python
+import subprocess
+
+# Define the kubectl command
+kubectl_command = "kubectl get pods"
+
+# Run the command and capture the output
+output = subprocess.check_output(kubectl_command.split())
+
+# Decode the byte output to string
+output = output.decode("utf-8")
+
+# Print the output
+print(output)
+```
+
+This code will execute the `kubectl get pods` command and print the output in the notebook. Note that you need to have `kubectl` and the necessary permissions set up on your environment for this to work.
