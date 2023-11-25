@@ -1,0 +1,25 @@
+To execute the `kubectl get nodes` command using Ansible, you can use the `shell` module. Here's an example playbook:
+
+```yaml
+---
+- name: Execute kubectl get nodes
+  hosts: localhost  # Replace with the appropriate host or inventory group
+  tasks:
+    - name: Run kubectl command
+      shell: kubectl get nodes
+      register: kubectl_output
+
+    - name: Display output
+      debug:
+        var: kubectl_output.stdout_lines
+```
+
+Make sure you have Ansible installed and properly configured with the target host before running this playbook. Replace `localhost` with the appropriate host or inventory group where you want to execute the `kubectl` command.
+
+You can then run the playbook using the `ansible-playbook` command:
+
+```
+ansible-playbook playbook.yml
+```
+
+This will execute the `kubectl get nodes` command and display the output of the command using the `debug` module.
