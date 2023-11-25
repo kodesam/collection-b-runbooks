@@ -1,0 +1,34 @@
+To retrieve information about Persistent Volumes (PVs) in OpenShift using Python, you can use the OpenShift Python client library. Here's an example code snippet to get PVs:
+
+```python
+from openshift import config, client
+
+# Load OpenShift configuration
+config.load_kube_config()
+
+# Create an OpenShift API client
+api_client = client.ApiClient()
+
+# Get the PVs
+v1_client = client.CoreV1Api(api_client)
+pv_list = v1_client.list_persistent_volume()
+
+# Print PV details
+for pv in pv_list.items:
+    pv_name = pv.metadata.name
+    pv_status = pv.status.phase
+    
+    print(f"PV Name: {pv_name}")
+    print(f"Status: {pv_status}")
+    print("---------------------")
+```
+
+In this example, the `config.load_kube_config()` function is used to load the OpenShift configuration from the default location (`~/.kube/config`). You can provide a custom configuration file path if necessary.
+
+The code creates an OpenShift API client using the `client.ApiClient()` function. Then, it uses the `list_persistent_volume()` method from the `CoreV1Api` client to retrieve the list of PVs.
+
+Finally, it iterates over the PV list and prints the name and status of each PV.
+
+Make sure you have the `openshift` Python library installed by running `pip install openshift` before executing the code.
+
+Note: This code assumes that you have the necessary permissions to access PVs in the OpenShift cluster.
