@@ -1,0 +1,23 @@
+To retrieve the Persistent Volumes using `kubectl` in a Jupyter notebook with Python, you can use the `subprocess` module. Here's an example:
+
+```python
+import subprocess
+
+def get_persistent_volumes():
+    command = "kubectl get pv -o yaml"
+    process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+    output, error = process.communicate()
+    
+    if error:
+        print(f"Error: {error.decode()}")
+        return None
+    
+    return output.decode()
+
+persistent_volumes = get_persistent_volumes()
+print(persistent_volumes)
+```
+
+This code defines a function `get_persistent_volumes()` that executes the `kubectl get pv -o yaml` command to retrieve the Persistent Volumes in YAML format. It uses the `subprocess.Popen` function to run the command and captures the output.
+
+Note that you need to have `kubectl` installed and configured on the environment where the Jupyter notebook is running. Make sure the required permissions are set to access and retrieve the Persistent Volumes.
