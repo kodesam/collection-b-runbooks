@@ -1,0 +1,31 @@
+To delete files in Linux, you can use the `rm` command. Below are some examples of how you can use it:
+
+1. Delete a single file:
+```
+rm file.txt
+```
+
+2. Delete multiple files:
+```
+rm file1.txt file2.txt file3.txt
+```
+
+3. Delete all files in a directory:
+```
+rm *
+```
+Note: This will delete all files in the current directory.
+
+4. Delete files in a specific directory:
+```
+rm /path/to/directory/*
+```
+Note: This will delete all files in the specified directory.
+
+5. Delete files recursively in a directory (including subdirectories):
+```
+rm -r /path/to/directory/
+```
+Note: This will delete all files and directories within the specified directory.
+
+Please be cautious when using the `rm` command as it permanently deletes files and they cannot be recovered.
