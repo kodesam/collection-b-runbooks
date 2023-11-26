@@ -1,0 +1,85 @@
+Here's an example of an Ansible playbook that can be used to create an OpenShift cluster with 3 master nodes and 2 worker nodes, using the specified IP address and subnet.
+
+```yaml
+---
+- name: Create OpenShift Cluster
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Install openshift-ansible dependencies
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - pyOpenSSL
+        - python-cryptography
+        - python-lxml
+        - python2-docker-py
+        - python-docker-pycreds
+        - python-passlib
+        - ansible
+        - git
+
+    - name: Clone openshift-ansible repository
+      git:
+        repo: "https://github.com/openshift/openshift-ansible.git"
+        dest: "/opt/openshift-ansible"
+        version: "origin/release-3.11"
+
+    - name: Create inventory file
+      copy:
+        content: |
+          [masters]
+          master1  openshift_ip=192.100.10.10
+          master2  openshift_ip=192.100.10.11
+          master3  openshift_ip=192.100.10.12
+
+          [etcd]
+          master1
+          master2
+          master3
+
+          [nodes]
+          worker1  openshift_ip=192.100.10.13
+          worker2  openshift_ip=192.100.10.14
+
+          [etcd:vars]
+          etcd_ip=192.100.10.10
+
+          [nodes:vars]
+          openshift_public_hostname=192.100.10.10
+        dest: "/opt/openshift-cluster/inventory"
+
+    - name: Run openshift-ansible playbook
+      command: >
+        ansible-playbook
+        -i /opt/openshift-cluster/inventory
+        /opt/openshift-ansible/playbooks/prerequisites.yml
+        -e "os_sdn_network_plugin_name=redhat/openshift-ovs-subnet"
+      environment:
+        ANSIBLE_HOST_KEY_CHECKING: "False"
+        ANSIBLE_SSH_RETRIES: "3"
+
+    - name: Deploy OpenShift cluster
+      command: >
+        ansible-playbook
+        -i /opt/openshift-cluster/inventory
+        /opt/openshift-ansible/playbooks/deploy_cluster.yml
+        -e "os_sdn_network_plugin_name=redhat/openshift-ovs-subnet"
+      environment:
+        ANSIBLE_HOST_KEY_CHECKING: "False"
+        ANSIBLE_SSH_RETRIES: "3"
+```
+
+To use this playbook, follow these steps:
+
+1. Ensure that Ansible is installed on your local machine.
+2. Copy the playbook code into a file, e.g., `openshift-cluster.yml`.
+3. Modify the IP addresses to match your desired configuration.
+4. Run the playbook with the following command:
+```
+ansible-playbook openshift-cluster.yml
+```
+   
+This playbook will install the necessary dependencies, clone the `openshift-ansible` repository, create an inventory file, run the prerequisites playbook, and finally, deploy the OpenShift cluster.
