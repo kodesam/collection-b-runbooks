@@ -1,0 +1,28 @@
+To retrieve the tokens of the OpenShift cluster using the `kubectl` command, you can use the `shell` module in Ansible to execute the `kubectl get token` command. Here's an example Ansible playbook that retrieves the tokens:
+
+```yaml
+---
+- name: Get OpenShift tokens
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Retrieve OpenShift tokens
+      shell:
+        cmd: kubectl get token -o jsonpath='{.items[*].status.token}'
+      register: tokens
+
+    - name: Print tokens
+      debug:
+        var: tokens.stdout
+```
+
+This playbook runs the `kubectl get token` command using the `shell` module and stores the output in the `tokens` variable. Finally, it prints the value of the `tokens` variable.
+
+To run this playbook, save it in a file (e.g., `get_tokens.yml`) and execute the following command:
+
+```bash
+ansible-playbook get_tokens.yml
+```
+
+Make sure you have `kubectl` installed and configured for your OpenShift cluster on the Ansible control machine.
