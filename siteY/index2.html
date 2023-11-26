@@ -4,13 +4,20 @@
     <title>BlueRunBook.ai</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
-    <style>
-        /* CSS styles for scrolling */
-        .scroll-container {
-            height: 800px; /* Set the desired height for the scrollable area */
-            overflow-y: scroll;
+ <style>
+        /* CSS styles for displaying in full view */
+        body, html {
+            height: 100%;
         }
-    </style>
+        
+        .scroll-container {
+            height: 100%;
+            overflow-y: scroll;
+            box-sizing: border-box;
+            padding: 20px;
+            background-color: #f2f8ff;
+        }
+</style>
 </head>
 <body>
     <div class="container">
