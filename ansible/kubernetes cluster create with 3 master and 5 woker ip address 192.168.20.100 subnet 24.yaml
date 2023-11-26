@@ -1,0 +1,91 @@
+Certainly! Here's an example of an Ansible playbook that creates a Kubernetes cluster with 3 master nodes and 5 worker nodes, using the specified IP address and subnet.
+
+```yaml
+---
+- name: Create Kubernetes Cluster
+  hosts: all
+  gather_facts: false
+  become: true
+
+  vars:
+    master_ip: 192.168.20
+    subnet_mask: 24
+    kubernetes_version: 1.22.1
+
+  tasks:
+    - name: Update hosts file with cluster nodes
+      lineinfile:
+        dest: /etc/hosts
+        line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }} {{ item }}"
+      loop: "{{ groups['masters'] + groups['workers'] }}"
+
+    - name: Install Docker
+      yum:
+        name: docker
+        state: latest
+
+    - name: Start and enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add Kubernetes repository
+      yum_repository:
+        name: kubernetes
+        baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-$basearch
+        gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg
+        enabled: true
+        gpgcheck: true
+
+    - name: Install Kubernetes packages
+      yum:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - kubelet
+        - kubeadm
+        - kubectl
+
+    - name: Initialize master nodes
+      command: >
+        kubeadm init
+        --control-plane-endpoint="{{ master_ip }}.1:6443"
+        --apiserver-advertise-address="{{ hostvars[item]['ansible_default_ipv4']['address'] }}"
+        --apiserver-cert-extra-sans="{{ hostvars[item]['ansible_default_ipv4']['address'] }}"
+        --pod-network-cidr=192.168.0.0/16
+        --kubernetes-version "{{ kubernetes_version }}"
+        --ignore-preflight-errors="NumCPU"
+      when: inventory_hostname in groups['masters']
+      register: join_command
+
+    - name: Store join command for worker nodes
+      set_fact:
+        join_cmd: "{{ join_command.stdout_lines | select('match', 'kubeadm join') | list | first }}"
+
+    - name: Deploy Calico network plugin on master nodes
+      shell: kubectl create -f https://docs.projectcalico.org/v3.22/manifests/calico.yaml
+      when: inventory_hostname in groups['masters']
+
+    - name: Join worker nodes to the cluster
+      command: >
+        {{ hostvars[groups['masters'][0]]['join_cmd'] }}
+      when: inventory_hostname in groups['workers']
+```
+
+To use this playbook:
+
+1. Ensure Ansible is installed on your system.
+2. Save the playbook code to a file, e.g., `create_kubernetes_cluster.yml`.
+3. Modify the `master_ip` variable to match the desired IP address (e.g., `192.168.20`).
+4. Run the playbook with the following command:
+
+```bash
+ansible-playbook -i inventory_file create_kubernetes_cluster.yml
+```
+
+Make sure to update the `inventory_file` with the IP addresses of your master and worker nodes.
+
+This playbook installs Docker and Kubernetes packages, initializes the master nodes, deploys the Calico network plugin on the master nodes, and joins the worker nodes to the cluster. Each node's IP address is added to the `/etc/hosts` file, enabling hostname resolution.
+
+Note: This playbook assumes that SSH access has been set up between the control machine and the cluster nodes, and the playbook is executed from the control machine.
