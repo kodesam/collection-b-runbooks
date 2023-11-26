@@ -1,0 +1,160 @@
+Sure! Here's an example of an Ansible playbook that can be used to create an OpenShift cluster with 3 master nodes and 4 worker nodes, using the specified IP address and subnet.
+
+```yaml
+---
+- name: Create OpenShift Cluster
+  hosts: all
+  gather_facts: false
+  become: true
+
+  vars:
+    cluster_subnet: 192.100.10.1/24
+    cluster_domain: cluster.example.com
+    openshift_version: 4.8
+
+  tasks:
+    - name: Install required packages
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - wget
+        - git
+        - net-tools
+        - bind-utils
+        - iptables-services
+        - bridge-utils
+        - bash-completion
+        - kexec-tools
+        - sos
+        - psacct
+        - ansible
+
+    - name: Start and enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Disable SELinux
+      selinux:
+        state: disabled
+
+    - name: Configure firewall rules
+      firewalld:
+        port: "{{ item }}"
+        state: enabled
+        immediate: true
+        permanent: true
+      loop:
+        - 22
+        - 80
+        - 443
+        - 8443
+        - 2379-2380
+        - 10250-10255
+
+    - name: Configure Kubernetes repository
+      yum_repository:
+        name: kubernetes
+        description: Kubernetes Repository
+        baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+        enabled: true
+        gpgcheck: true
+        repo_gpgcheck: true
+        gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg
+                https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+
+    - name: Install Kubernetes packages
+      yum:
+        name:
+          - kubeadm
+          - kubelet
+          - kubectl
+        state: present
+
+    - name: Configure hosts file
+      lineinfile:
+        path: /etc/hosts
+        line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }} {{ item }}"
+        state: present
+        create: true
+      loop: "{{ groups['all'] | difference(groups['ungrouped']) }}"
+
+    - name: Initialize OpenShift cluster on master nodes
+      command: >
+        kubeadm init
+        --kubernetes-version={{ openshift_version }}
+        --apiserver-advertise-address={{ hostvars[item]['ansible_default_ipv4']['address'] }}
+        --pod-network-cidr=10.244.0.0/16
+      when: "'master' in group_names"
+      loop: "{{ groups['masters'] }}"
+
+    - name: Share kubeconfig file with worker nodes
+      copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /etc/kubernetes/kubeconfig
+        owner: root
+        group: root
+        mode: 0644
+      when: "'worker' in group_names"
+
+    - name: Join worker nodes to the cluster
+      command: >
+        kubeadm join
+        {{ hostvars[groups['masters'][0]]['ansible_default_ipv4']['address'] }}:6443
+        --token=<TOKEN>
+        --discovery-token-ca-cert-hash=sha256:<HASH>
+      when: "'worker' in group_names"
+      loop: "{{ groups['workers'] }}"
+
+    - name: Install Calico network plugin
+      command: >
+        kubectl apply -f https://docs.projectcalico.org/v3.21/manifests/calico.yaml
+      when: "'master' in group_names"
+
+    - name: Configure kubeconfig for cluster access
+      copy:
+        content: |
+          apiVersion: v1
+          clusters:
+          - cluster:
+              certificate-authority-data: <CA_CERTIFICATE_DATA>
+              server: https://{{ hostvars[groups['masters'][0]]['ansible_default_ipv4']['address'] }}:6443
+            name: default-cluster
+          contexts:
+          - context:
+              cluster: default-cluster
+              user: default-user
+            name: default-context
+          current-context: default-context
+          kind: Config
+          preferences: {}
+          users:
+          - name: default-user
+            user:
+              client-certificate-data: <CLIENT_CERTIFICATE_DATA>
+              client-key-data: <CLIENT_KEY_DATA>
+        dest: $HOME/.kube/config
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: 0600
+      become_user: "{{ ansible_user }}"
+```
+
+To use this playbook:
+
+1. Ensure Ansible is installed on your system.
+2. Save the playbook to a file, e.g., `create_openshift_cluster.yml`.
+3. Replace `<TOKEN>` and `<HASH>` with the actual token and certificate hash.
+4. Run the playbook with the following command:
+
+```bash
+ansible-playbook -i hosts create_openshift_cluster.yml
+```
+
+Make sure to update the `hosts` file with the IP addresses of your master and worker nodes.
+
+This playbook installs the required packages, configures Docker and Kubernetes, initializes the OpenShift cluster on the master nodes, joins the worker nodes to the cluster, installs the Calico network plugin, and configures the kubeconfig file for cluster access.
+
+Note: This playbook assumes the nodes are already reachable via SSH, and the necessary SSH keys are set up for access.
