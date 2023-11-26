@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BlueRunBook.ai</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        /* CSS styles for scrolling */
+        .scroll-container {
+            height: 400px; /* Set the desired height for the scrollable area */
+            overflow-y: scroll;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <p> AI running .....</p>
+    </div>    
+    <header>
+        <h1><span>i</span>blueRunBook.ai</h1>
+    </header>
+    <main class="scroll-container">  <!-- Wrap the content in a scrollable container -->
+        <section>
+            <h2>About</h2>
+            <p>BlueRunBook.ai is a powerful platform for creating and automating runbooks with AI assistance.</p>
+        </section>
+        <section>
+            <h2>Features</h2>
+            <ul>
+                <li>AI-powered runbook automation</li>
+                <li>Intuitive and user-friendly interface</li>
+                <li>Seamless integration with existing tools</li>
+                <li>Efficient collaboration and task management</li>
+            </ul>
+            <h3><span style="font-style: italic; font-weight: bold;">GitHub</span> File Viewer</h3>
+            <div id="file-list">
+                <ul>
+                    <!-- File list generated dynamically with JavaScript -->
+                </ul>
+            </div>
+        </section>
+    </main>
+    <div class="running-robot"></div>
+    <script src="script.js"></script>
+</body>
+</html>
