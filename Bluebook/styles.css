@@ -1,0 +1,123 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f2f2f2;
+    color: #333;
+    overflow: hidden;
+}
+
+header {
+    background-color: #333;
+    padding: 20px;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+}
+
+scroll-container {
+            height: 400px; /* Set the desired height for the scrollable area */
+            overflow-y: scroll;
+        }
+
+h1 {
+    font-size: 48px;
+    margin: 0;
+    letter-spacing: 2px;
+    position: relative;
+    animation: flicker 1.2s infinite alternate;
+}
+
+@keyframes flicker {
+    0% { opacity: 0.9; }
+    50% { opacity: 1; }
+    100% { opacity: 0.9; }
+}
+
+h1 span {
+    color: #00aaff;
+}
+
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    animation: slide-up 0.8s ease forwards;
+    position: relative;
+    z-index: 10;
+}
+
+@keyframes slide-up {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+section {
+    margin-bottom: 30px;
+    transition: transform 0.4s ease;
+}
+
+section:hover {
+    transform: scale(1.02);
+}
+
+h2 {
+    font-size: 36px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #00aaff;
+    padding-bottom: 10px;
+    color: #444;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+a {
+    color: #00aaff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #0066cc;
+}
+
+.running-robot {
+    position: fixed;
+    bottom: 0;
+    left: -100px;
+    width: 400px;
+    height: 500px;
+    background-image: url('/robot.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    animation: running 4s linear infinite;
+    z-index: 1;
+}
+
+@keyframes running {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(calc(100% + 400px)); }
+}
+
+.ring{
+    width: 200px;
+    height: 200px;
+    border: 0px solid #000;
+    border-radius: 50%;
+    position: absolute;
+}
+.ring:nth-child(1){
+    border-bottom-width: 8px;
+    border-color: rgb(255,255,255);
+    animation: rotate1 2s linear infinity;
+}
