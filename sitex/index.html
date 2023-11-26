@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GitHub File Viewer</title>
+</head>
+<body>
+    <h1>GitHub File Viewer</h1>
+    <div id="file-list"></div>
+
+    <script>
+        // GitHub repository details
+        const owner = "kodesam";
+        const repo = "collection-i-runbooks";
+        const folder = "python";
+
+        // Fetch the list of files from the GitHub API
+        fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${folder}`)
+            .then(response => response.json())
+            .then(data => {
+                // Process the file data
+                const fileList = data.map(file => {
+                    return {
+                        name: file.name,
+                        url: file.download_url,
+                    };
+                });
+
+                // Render the file list on the web page
+                const fileListElement = document.getElementById("file-list");
+                fileList.forEach(file => {
+                    const fileElement = document.createElement("a");
+                    fileElement.href = file.url;
+                    fileElement.text = file.name;
+                    fileElement.target = "_blank";
+
+                    fileListElement.appendChild(fileElement);
+                    fileListElement.appendChild(document.createElement("br"));
+                });
+            })
+            .catch(error => console.error("Error fetching file list:", error));
+    </script>
+</body>
+</html>
