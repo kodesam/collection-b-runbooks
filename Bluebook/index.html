@@ -22,7 +22,42 @@
 <body>
     <div class="container">
     <p class="running-text">AI running<span class="running-script">.</span></p>
-    </div>   
+    </div> 
+    <style>
+.container {
+  text-align: center;
+}
+
+.running-text {
+  font-weight: bold;
+  font-size: 24px;
+  animation: running-animation 1s infinite;
+}
+
+@keyframes running-animation {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.running-script {
+  opacity: 0;
+  animation: script-animation 1s infinite steps(5);
+}
+
+@keyframes script-animation {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+</style>
+
+    
     <header>
         <h1><span>B</span>lueRunBook.ai</h1>
     </header>
