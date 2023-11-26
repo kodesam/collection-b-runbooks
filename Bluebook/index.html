@@ -20,40 +20,49 @@
 </style>
 </head>
 <body>
-    <div class="container">
-    <p class="running-text">AI running<span class="running-script">.</span></p>
-    </div> 
-    <style>
+
+ <div class="container">
+    <p class="running-text">
+        <span class="ai-letter">A</span>
+        <span class="ai-letter">I</span>
+        <span class="space"></span>
+        <span class="running-script">r</span>
+        <span class="running-script">u</span>
+        <span class="running-script">n</span>
+        <span class="running-script">n</span>
+        <span class="running-script">i</span>
+        <span class="running-script">n</span>
+        <span class="running-script">g</span>
+    </p>
+</div>
+
+<style>
 .container {
-  text-align: center;
+    text-align: center;
 }
 
 .running-text {
-  font-weight: bold;
-  font-size: 24px;
-  animation: running-animation 1s infinite;
+    font-weight: bold;
+    font-size: 24px;
 }
 
-@keyframes running-animation {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+.ai-letter {
+    color: blue;
+}
+
+.space {
+    display: inline-block;
+    width: 1em;
 }
 
 .running-script {
-  opacity: 0;
-  animation: script-animation 1s infinite steps(5);
+    animation: script-animation 1s infinite;
+    display: inline-block;
 }
 
 @keyframes script-animation {
-  from { opacity: 0; }
-  to { opacity: 1; }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 </style>
 
