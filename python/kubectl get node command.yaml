@@ -1,0 +1,13 @@
+To get a list of all nodes in a Kubernetes cluster, you can use the `kubectl get nodes` command. Here's an example of how to use it:
+
+1. Open a terminal or command prompt.
+
+2. Execute the following command:
+
+```
+kubectl get nodes
+```
+
+This command will return a list of all nodes in the cluster, along with their status, role, version, and other relevant information.
+
+Note that you'll need to have the `kubectl` command-line tool installed and properly configured to access your Kubernetes cluster. If you're using a local cluster like Minikube, you may also need to start the cluster before running the command.
