@@ -6,11 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const pre = document.createElement('pre');
     pre.textContent = `# RunBook.ai
 
-def automate_runbook():
-    # Write your automation logic here
-    print("Automating runbook with AI assistance")
 
-automate_runbook()`;
 
     backgroundCode.appendChild(pre);
 });
