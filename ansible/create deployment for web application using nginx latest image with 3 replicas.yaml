@@ -1,0 +1,52 @@
+Sure! Here's an example of an Ansible playbook that creates a deployment for a web application using the Nginx latest image with 3 replicas:
+
+```yaml
+---
+- name: Create Deployment for Web Application
+  hosts: localhost
+  gather_facts: false
+  become: true
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Pull Nginx latest image
+      docker_image:
+        name: nginx:latest
+        source: pull
+
+    - name: Create deployment
+      k8s:
+        api_version: apps/v1
+        kind: Deployment
+        name: webapp-deployment
+        namespace: default
+        replicas: 3
+        labels:
+          app: webapp
+        spec:
+          selector:
+            matchLabels:
+              app: webapp
+          template:
+            metadata:
+              labels:
+                app: webapp
+            spec:
+              containers:
+                - name: nginx
+                  image: nginx:latest
+                  ports:
+                    - containerPort: 80
+```
+
+Make sure you have Ansible installed on your machine before running this playbook. You can save the above code in a file (e.g., `create_deployment.yaml`) and run it using the following command:
+
+```bash
+ansible-playbook create_deployment.yaml
+```
+
+Note that this playbook assumes that you have a Kubernetes cluster configured and connected to your Ansible host. It also assumes that you have Docker already installed on your system. Adjust the playbook according to your environment and requirements.
