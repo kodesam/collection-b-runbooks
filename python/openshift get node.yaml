@@ -1,0 +1,23 @@
+You can use the OpenShift Python library to interact with the OpenShift API and get information about nodes. Here's an example of how to get node information using the OpenShift Python library:
+
+```python
+from openshift import client, config
+
+# Load OpenShift configuration from default location
+config.load_kube_config()
+
+# Create a client to interact with the OpenShift API
+oapi_client = client.OapiApi()
+
+# Get the list of nodes
+resp = oapi_client.list_node()
+
+# Process the response and print node details
+for node in resp.items:
+    print("Node Name:", node.metadata.name)
+    print("Node Status:", node.status.phase)
+    # You can access more details about the node using other properties in the `node` object
+    print("---------------")
+```
+
+Make sure you have the `openshift` library installed before running the above code. You can install it using `pip install openshift`.
