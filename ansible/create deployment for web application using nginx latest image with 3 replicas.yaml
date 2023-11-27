@@ -1,0 +1,42 @@
+First, you'll need to create a YAML file for the Ansible playbook. Save it as `deploy-webapp.yml`:
+
+```yaml
+---
+- name: Deploy web application with nginx
+  hosts: localhost
+  become: true
+  tasks:
+    - name: Create nginx deployment
+      k8s:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: webapp-deployment
+          spec:
+            replicas: 3
+            selector:
+              matchLabels:
+                app: webapp
+            template:
+              metadata:
+                labels:
+                  app: webapp
+              spec:
+                containers:
+                  - name: nginx
+                    image: nginx:latest
+                    ports:
+                      - containerPort: 80
+```
+
+This playbook will create a Kubernetes deployment for the web application using the latest nginx image. It will create 3 replicas of the deployment.
+
+To run the playbook, use the following command:
+
+```bash
+ansible-playbook deploy-webapp.yml
+```
+
+Make sure you have Ansible installed and configured to manage your Kubernetes cluster. You'll also need the `k8s` module installed.
