@@ -1,0 +1,29 @@
+If you're looking to run the `kubectl get pod` command using shell scripting, a basic script can be written as follows:
+
+```bash
+#!/bin/bash
+
+kubectl get pods
+```
+
+To create and run the script, follow these steps:
+
+1. Open a text editor and copy the above script into a new file, e.g., `get-pods.sh`.
+
+2. Save the file and close the text editor.
+
+3. Open a terminal or command prompt, navigate to the directory where you saved the script file, and run the following command to make the file executable:
+
+```
+chmod +x get-pods.sh
+```
+
+4. Finally, execute the script by running the command:
+
+```
+./get-pods.sh
+```
+
+The script will execute the `kubectl get pods` command and display a list of the pods in your Kubernetes cluster.
+
+Make sure you have the `kubectl` command-line tool installed and correctly configured to access your cluster.
