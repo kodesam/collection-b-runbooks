@@ -1,0 +1,32 @@
+Here is an example of an Ansible playbook for performing Linux health checks using shell scripts:
+
+```yaml
+---
+- name: Linux Health Check
+  hosts: all
+  gather_facts: true
+
+  tasks:
+
+    - name: Run Shell Script
+      shell: "bash /path/to/health_check_script.sh"
+      register: health_check_output
+
+    - name: Display Output
+      debug:
+        var: health_check_output.stdout_lines
+```
+
+In the above example, we are running a shell script named `health_check_script.sh` using the `shell` module in Ansible. The `register` parameter is used to capture the output of the script.
+
+You would replace `/path/to/health_check_script.sh` with the actual path to your shell script.
+
+You can add more tasks to the playbook to perform additional health checks or perform other actions based on the output of the shell script.
+
+To execute the playbook, save it in a file (e.g., `health_check.yml`) and run the following command:
+
+```
+ansible-playbook health_check.yml
+```
+
+Make sure you have Ansible installed and your inventory file is properly configured.
