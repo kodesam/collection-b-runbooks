@@ -1,0 +1,47 @@
+To create a StatefulSet for a database application in Kubernetes, you'll need to define a YAML file manifest. Here's an example configuration for a StatefulSet:
+
+```yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: database-statefulset
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: database
+  serviceName: database-service
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+      - name: database
+        image: <database-image>
+        ports:
+        - containerPort: <database-port>
+        volumeMounts:
+        - name: data
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
+```
+
+Replace `<database-image>` with the image name of your database application, and `<database-port>` with the desired port for the database.
+
+Save the above configuration to a YAML file (e.g., `database-statefulset.yaml`), and then apply it to your Kubernetes cluster using the `kubectl` command:
+
+```
+kubectl apply -f database-statefulset.yaml
+```
+
+This will create a StatefulSet with 3 replicas of your database application. Each replica will have its own unique network identity and stable hostname. A PersistentVolumeClaim will also be provisioned for each replica to store the data.
+
+Note that you may need to customize other aspects of the configuration, such as resource requirements, environment variables, or security settings, based on the specific requirements of your database application.
