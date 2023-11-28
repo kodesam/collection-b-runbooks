@@ -1,0 +1,67 @@
+Certainly! Here's an example of an Ansible playbook that creates a deployment with secrets, configmap, service, and route using an input file for Jinja templates and passing variables as extra vars using `--extra-vars` option:
+
+```yaml
+---
+- name: Create deployment with secrets, configmap, service, and route
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    deployment_name: my-deployment
+    template_input_file: templates/input.j2
+
+  tasks:
+    - name: Load Jinja template input file
+      slurp:
+        src: "{{ template_input_file }}"
+      register: template_input
+
+    - name: Render Jinja template
+      template:
+        src: "{{ template_input_file }}"
+        dest: "{{ deployment_name }}.yaml"
+        vars:
+          secrets: "{{ secrets }}"
+          configmap: "{{ configmap }}"
+          service_name: "{{ service_name }}"
+          route_host: "{{ route_host }}"
+          template_input: "{{ template_input.content | b64decode | from_yaml }}"
+
+    - name: Apply deployment
+      kubectl:
+        state: present
+        src: "{{ deployment_name }}.yaml"
+
+    - name: Remove temporary file
+      file:
+        path: "{{ deployment_name }}.yaml"
+        state: absent
+```
+
+In this example, the playbook expects a Jinja template input file (`templates/input.j2`) with placeholder variables that will be replaced during rendering. You can pass the variable values through an external input YAML file:
+
+```yaml
+# input.yml
+secrets:
+  - name: db-password
+    value: secretpassword
+  - name: api-key
+    value: apikeyvalue
+
+configmap:
+  - name: app-config
+    value:
+      app_name: my-app
+      app_env: production
+
+service_name: my-service
+route_host: mydomain.com
+```
+
+You can run this playbook using the following command:
+
+```bash
+$ ansible-playbook playbook.yaml --extra-vars "@input.yml"
+```
+
+The playbook will render the Jinja template, replace variables with the values provided in the input YAML file, and create the deployment, secrets, configmap, service, and route with the rendered YAML file. The temporary YAML file generated during rendering will be removed afterward.
