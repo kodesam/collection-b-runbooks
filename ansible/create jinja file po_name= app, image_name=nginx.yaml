@@ -1,0 +1,50 @@
+To create a Jinja template file with input parameters `pod_name` and `image_name`, you can use the following Ansible playbook:
+
+```yaml
+---
+- name: Create Jinja template for pod
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    pod_name: "app"
+    image_name: "nginx"
+
+  tasks:
+    - name: Create Jinja template file
+      template:
+        src: pod_template.yml.j2
+        dest: pod.yml
+```
+
+In this playbook:
+
+- The `pod_name` variable is set to "app", and the `image_name` variable is set to "nginx" in the `vars` section. Modify these variables to customize the pod name and image name as required.
+
+- Create a Jinja template file `pod_template.yml.j2` with the following content:
+
+  ```yaml
+  ---
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: {{ pod_name }}
+  spec:
+    containers:
+      - name: {{ pod_name }}
+        image: {{ image_name }}
+        ports:
+          - containerPort: 80
+  ```
+
+  In the template file, the variables `{{ pod_name }}` and `{{ image_name }}` are used and will be replaced with their respective values during the template rendering.
+
+- The `template` module is used to render the template file and save it as `pod.yml`.
+
+To execute the playbook, run the following command:
+
+```
+ansible-playbook create_jinja_template.yml
+```
+
+After running the playbook, a Jinja template file named `pod.yml` will be created with the input parameters `pod_name=app` and `image_name=nginx`.
