@@ -1,0 +1,19 @@
+To check the active status of a service using `systemctl`, you can execute the following command:
+
+```
+systemctl is-active <service-name>
+```
+
+Replace `<service-name>` with the name of the service you want to check. For example, to check the active status of the NGINX service, you can run:
+
+```
+systemctl is-active nginx
+```
+
+The command will return one of the following outputs:
+
+- `active` if the service is active
+- `inactive` if the service is not active
+- `unknown` if the status of the service cannot be determined
+
+You can use this command as part of your Ansible playbook or directly on the command line.
