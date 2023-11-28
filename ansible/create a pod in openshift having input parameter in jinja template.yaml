@@ -1,0 +1,54 @@
+To create a pod in OpenShift using an input parameter in a Jinja template, you can use the `template` module in Ansible. Here's an example playbook:
+
+```yaml
+---
+- name: Create pod in OpenShift using Jinja template
+  hosts: localhost
+  gather_facts: false
+  
+  vars:
+    pod_name: "my-pod"
+    image_name: "nginx"
+
+  tasks:
+    - name: Create Jinja template
+      template:
+        src: pod_template.yml.j2
+        dest: pod.yml
+
+    - name: Create pod
+      command: oc create -f pod.yml
+      changed_when: false
+```
+
+In the above playbook:
+
+- Set the input parameters such as `pod_name` and `image_name` in the `vars` section. You can modify these values as per your requirement.
+
+- Use the `template` module to create a Jinja template file. In this example, the Jinja template is named `pod_template.yml.j2`, and it will generate the final pod configuration file named `pod.yml`. 
+
+  Here's an example of how `pod_template.yml.j2` might look like:
+
+  ```yaml
+  ---
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    name: {{ pod_name }}
+  spec:
+    containers:
+      - name: {{ pod_name }}
+        image: {{ image_name }}
+        ports:
+          - containerPort: 80
+  ```
+
+  The Jinja variables `{{ pod_name }}` and `{{ image_name }}` will be replaced by their respective values during template rendering.
+
+- Finally, use the `oc create` command to create the pod in OpenShift using the generated `pod.yml` file.
+
+Run the playbook using the `ansible-playbook` command:
+
+```
+ansible-playbook create_pod.yml
+```
