@@ -1,0 +1,32 @@
+Sure, here's an example of an Ansible playbook that can be used to delete evicted pods in OpenShift:
+
+```yaml
+---
+- name: Delete evicted pods in OpenShift
+  hosts: localhost
+  gather_facts: false
+
+  vars:
+    oc_command: "/usr/local/bin/oc"  # Change the path to the oc command if necessary
+
+  tasks:
+    - name: Get a list of evicted pods
+      command: "{{ oc_command }} get pods --all-namespaces --field-selector 'status.phase=Failed,status.reason=Evicted' --no-headers -o custom-columns=':metadata.namespace,:metadata.name'"
+      register: evicted_pods
+      changed_when: false
+      failed_when: false
+
+    - name: Delete evicted pods
+      command: "{{ oc_command }} delete pods -n {{ item.split(':')[0] }} {{ item.split(':')[1] }}"
+      with_items: "{{ evicted_pods.stdout_lines }}"
+```
+
+You can save the above code in a file with the extension `.yaml` (e.g., `delete_evicted_pods.yaml`) and then execute it using the `ansible-playbook` command:
+
+```shell
+ansible-playbook delete_evicted_pods.yaml
+```
+
+Make sure to replace the `oc_command` variable with the actual path to the `oc` command on your system. This playbook first retrieves a list of evicted pods using the `oc get pods` command and filters for pods that are in the "Failed" phase and have a reason of "Evicted". Then, it deletes each evicted pod using the `oc delete pods` command.
+
+Note: Ensure that you have the OpenShift command-line tool (`oc`) installed and configured on the machine where you run the playbook.
