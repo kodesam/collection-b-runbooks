@@ -1,0 +1,18 @@
+Here's an example of how you can use Ansible to run the `kubectl get pod` command:
+
+```yaml
+---
+- name: Run kubectl get pod
+  hosts: localhost
+  tasks:
+    - name: Run kubectl command
+      command: kubectl get pod
+```
+
+This playbook defines a single task that runs the `kubectl get pod` command on the localhost. You can save the playbook in a file (e.g., `get_pod.yaml`), and then run it using the `ansible-playbook` command:
+
+```shell
+ansible-playbook get_pod.yaml
+```
+
+Make sure you have Ansible installed and configured properly on the machine where you run the playbook.
