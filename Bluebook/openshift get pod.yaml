@@ -1,0 +1,38 @@
+To get pods in Openshift using Ansible, you can use the `openshift_raw` module which allows you to execute OpenShift client commands directly. Here's an example playbook for getting the pods:
+
+```yaml
+---
+- name: Get pod information
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Login to OpenShift
+      openshift_raw:
+        api_url: "{{ api_url }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        command: "login"
+        validate_certs: false
+
+    - name: Get pods
+      openshift_raw:
+        api_url: "{{ api_url }}"
+        username: "{{ username }}"
+        password: "{{ password }}"
+        command: "get po"
+        validate_certs: false
+```
+
+In this playbook, you first need to provide the `api_url`, `username`, and `password` variables to authenticate with the Openshift cluster.
+
+You can save this playbook in a file, e.g., `get_pods.yml`, and then run it using the `ansible-playbook` command:
+
+```
+ansible-playbook get_pods.yml
+```
+
+Make sure you have the necessary dependencies installed, including the `openshift` Python module. You can install it using the following command:
+
+```
+pip install openshift
+```
