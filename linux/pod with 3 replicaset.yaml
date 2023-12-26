@@ -1,0 +1,47 @@
+To deploy a pod with three replicasets on OpenShift using Ansible, you can use the following playbook example:
+
+```yaml
+---
+- hosts: localhost
+  tasks:
+    - name: Create OpenShift project
+      oc_project:
+        name: my-project
+        state: present
+    
+    - name: Create replicasets
+      k8s:
+        name: my-replicaset
+        api_version: apps/v1
+        kind: ReplicaSet
+        definition:
+          apiVersion: apps/v1
+          kind: ReplicaSet
+          metadata:
+            name: my-replicaset
+          spec:
+            replicas: 3
+            selector:
+              matchLabels:
+                app: my-app
+            template:
+              metadata:
+                labels:
+                  app: my-app
+              spec:
+                containers:
+                - name: my-container
+                  image: nginx:latest
+                  ports:
+                  - containerPort: 80
+```
+
+In this example, we are creating a project named "my-project" using the 'oc_project' module and then creating a ReplicaSet named "my-replicaset" using the `k8s` module. The ReplicaSet is configured to have three replicas and uses the `nginx:latest` image with port 80 exposed.
+
+You can save this playbook in a file, for example 'deploy_replicaset.yaml', and execute it using the `ansible-playbook` command:
+
+```
+ansible-playbook deploy_replicaset.yaml
+```
+
+Make sure you have the necessary Ansible modules (`oc_project` and `k8s`) installed and configured properly. Adjust the playbook according to your needs, like the project name, ReplicaSet name, number of replicas, and container image.
