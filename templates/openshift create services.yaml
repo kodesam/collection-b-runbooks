@@ -1,0 +1,26 @@
+To create a service in OpenShift using Ansible, you can use the `oc` module. Here is an example YAML playbook to create a service:
+
+```yaml
+---
+- name: Create OpenShift Service
+  hosts: localhost
+  tasks:
+    - name: Create service using oc command
+      command: oc create service clusterip my-service --tcp="8080:8080" --dry-run=client -o yaml
+      register: service_output
+
+    - name: Apply service YAML
+      command: oc apply -f -
+      args:
+        stdin: "{{ service_output.stdout }}"
+```
+
+This playbook creates a service called `my-service` with a cluster IP and port mapping from 8080 to 8080. The `oc create service` command is used to generate the YAML for the service and the `oc apply` command is used to apply the generated YAML to create the service.
+
+You can save this playbook as a `.yml` file and run it using the `ansible-playbook` command:
+
+```
+ansible-playbook create_service.yml
+```
+
+Make sure to have the `oc` command line tool installed and configured to communicate with your OpenShift cluster before running the playbook.
