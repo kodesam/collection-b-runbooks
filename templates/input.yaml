@@ -1,0 +1,3 @@
+# input.yml
+cluster_name: my-cluster
+kube_version: "1.21.2"
