@@ -1,0 +1,47 @@
+To create a service in OpenShift using Ansible, you can use the `oc` module. Here is an example YAML playbook to create a service:
+
+```yaml
+---
+- name: Create OpenShift Service
+  hosts: localhost
+  vars:
+    openshift_url: "https://api.openshift.example.com"
+    openshift_token: "your-openshift-token"
+    project_name: "your-project-name"
+    service_name: "your-service-name"
+    container_port: 8080
+    target_port: 8080
+    selector:
+      app: your-app-label
+  tasks:
+    - name: Create OpenShift Service
+      k8s:
+        api_version: "v1"
+        kind: "Service"
+        name: "{{ service_name }}"
+        namespace: "{{ project_name }}"
+        definition:
+          metadata:
+            labels:
+              app: "{{ selector.app }}"
+          spec:
+            selector:
+              app: "{{ selector.app }}"
+            ports:
+              - port: "{{ container_port }}"
+                targetPort: "{{ target_port }}"
+                protocol: TCP
+            type: ClusterIP
+```
+
+Make sure to replace the values of `openshift_url`, `openshift_token`, `project_name`, `service_name`, `container_port`, `target_port`, and `selector` with your specific values.
+
+This playbook uses the `k8s` module, which is a wrapper for the `oc` command in OpenShift. It creates a service resource in the specified project. The `selector` field is used to match the pods with the specified label in the `spec.selector.app` field.
+
+You can save this playbook as a `.yaml` file and run it using the `ansible-playbook` command:
+
+```
+ansible-playbook create_service.yaml
+```
+
+This will create the specified service in your OpenShift project.
