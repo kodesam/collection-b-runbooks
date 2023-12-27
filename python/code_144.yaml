@@ -1,0 +1,36 @@
+pod:
+- name: max-pod-1
+  image: nginx:latest
+  ports:
+    - containerPort: 80
+      protocol: TCP
+- name: max-pod-2
+  image: nginx:latest
+  ports:
+    - containerPort: 80
+      protocol: TCP
+- name: max-pod-3
+  image: nginx:latest
+  ports:
+    - containerPort: 80
+      protocol: TCP
+
+services:
+- name: max-service
+  type: NodePort
+  selector:
+    app: max
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+
+routes:
+- name: max-route
+  service: max-service
+  path: /
+  port:
+    targetPort: http
+  tls:
+    termination: edge
