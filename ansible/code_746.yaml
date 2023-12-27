@@ -1,0 +1,33 @@
+#Sure! Here is an example of a Kubernetes YAML file that creates a Deployment with 3 ReplicaSets:
+
+#```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-container
+        image: nginx:latest
+        ports:
+        - containerPort: 8080
+#```
+
+#In the YAML file, replace `my-deployment`, `my-app`, `your_image`, and `your_container_port` with the appropriate values for your Deployment.
+
+#You can apply this YAML file using the `kubectl` command-line tool:
+
+#```shell
+#kubectl apply -f deployment.yaml
+#```
+
+#This will create a Deployment named `my-deployment` with 3 ReplicaSets, each running a container with the specified image and port.
