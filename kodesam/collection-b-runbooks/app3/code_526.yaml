@@ -1,0 +1,100 @@
+Certainly! Here's an example of a Ansible playbook YAML that deploys a web application in a Kubernetes pod with secrets, configmap, services, and routes, along with an annotation for ArgoCD deployment:
+
+```yaml
+---
+- name: Deploy Web Application with ArgoCD Annotation
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Create Secrets
+      k8s:
+        definition: |
+          apiVersion: v1
+          kind: Secret
+          metadata:
+            name: my-secrets
+          data:
+            secret-key: BASE64_ENCODED_VALUE
+        state: present
+
+    - name: Create ConfigMap
+      k8s:
+        definition: |
+          apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: my-configmap
+          data:
+            config-key: config-value
+        state: present
+
+    - name: Create Deployment
+      k8s:
+        definition: |
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: my-app
+            annotations:
+              argocd.argoproj.io/sync-options: Prune=false
+          spec:
+            replicas: 1
+            selector:
+              matchLabels:
+                app: my-app
+            template:
+              metadata:
+                labels:
+                  app: my-app
+              spec:
+                containers:
+                  - name: my-app-container
+                    image: my-app-image:latest
+                    ports:
+                      - containerPort: 8080
+                    envFrom:
+                      - secretRef:
+                          name: my-secrets
+                      - configMapRef:
+                          name: my-configmap
+        state: present
+
+    - name: Create Service
+      k8s:
+        definition: |
+          apiVersion: v1
+          kind: Service
+          metadata:
+            name: my-app-service
+          spec:
+            selector:
+              app: my-app
+            ports:
+              - protocol: TCP
+                port: 80
+                targetPort: 8080
+        state: present
+
+    - name: Create Route
+      k8s:
+        definition: |
+          apiVersion: route.openshift.io/v1
+          kind: Route
+          metadata:
+            name: my-app-route
+          spec:
+            to:
+              kind: Service
+              name: my-app-service
+              weight: 100
+            port:
+              targetPort: 8080
+            tls:
+              termination: edge
+        state: present
+```
+
+In this Ansible playbook, the tasks are defined to create the secrets, configmap, deployment, service, and route resources. The deployment resource also includes an annotation `argocd.argoproj.io/sync-options` with the value `Prune=false` to control the ArgoCD deployment behavior.
+
+You can customize the resource names, values, and annotations according to your specific requirements. Run this playbook using Ansible to deploy the web application with the specified resources and ArgoCD annotation.
