@@ -1,0 +1,15 @@
+If you want to retrieve secrets in OpenShift using the `oc` command line tool, you can use the following command:
+
+```
+oc get secrets
+```
+
+This command will list all the secrets in your OpenShift cluster. Alternatively, you can specify a specific secret using:
+
+```
+oc get secret <secret-name>
+```
+
+Replace `<secret-name>` with the actual name of the secret you want to retrieve.
+
+Please note that you need to be authenticated and have the necessary permissions to access secrets in your OpenShift cluster.
