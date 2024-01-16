@@ -1,0 +1,50 @@
+Sure! Here's an example Ansible script that uses the a10_server module to manage A10 Networks devices and pull Docker images:
+
+
+---
+- name: Pull Docker images on A10 Networks devices
+  hosts: a10_devices
+  gather_facts: no
+  tasks:
+    - name: Connect to A10 Networks device
+      a10_server:
+        provider:
+          host: "{{ inventory_hostname }}"
+          username: admin
+          password: password
+        state: present
+
+    - name: Configure Docker registry credentials
+      a10_server_docker_image:
+        provider:
+          host: "{{ inventory_hostname }}"
+          username: admin
+          password: password
+        name: registry_credentials
+        registry: my-docker-registry
+        username: my-registry-username
+        password: my-registry-password
+        state: present
+
+    - name: Pull Docker images
+      a10_server_docker_image:
+        provider:
+          host: "{{ inventory_hostname }}"
+          username: admin
+          password: password
+        name: my-docker-image
+        pull: yes
+        state: present
+
+
+In this script, make sure to replace `a10_devices` with the actual name of your Ansible inventory group that includes the A10 Networks devices you want to manage. Also, update the `host`, `username`, and `password` parameters with the correct credentials for your A10 Networks devices.
+
+The script first connects to each A10 Networks device using the a10_server module. Then, it configures Docker registry credentials using the a10_server_docker_image module (`my-docker-registry`, `my-registry-username`, `my-registry-password`). Finally, it pulls a Docker image named `my-docker-image` using the same module.
+
+You can save this script in a `.yaml` file, such as `pull_docker_images.yaml`, and run it using the `ansible-playbook` command:
+
+
+ansible-playbook pull_docker_images.yaml
+
+
+Make sure you have the `a10-networks-acos-cli` module installed on the system where you are running Ansible.
